@@ -1,0 +1,227 @@
+CREATE DATABASE Bicicol;
+USE bicicol;
+
+
+CREATE TABLE Proveedor(
+NitEmpresa VARCHAR(150) NOT NULL PRIMARY KEY,
+NombreEmpresa VARCHAR(150) NOT NULL,
+Telefono VARCHAR(150) NOT NULL,
+Ciudad VARCHAR(150) NOT NULL,
+Direccion VARCHAR(150) NOT NULL,
+Email VARCHAR(150) NOT NULL);
+
+CREATE TABLE Compra(
+IdCompra VARCHAR(150) NOT NULL,
+ValorTotal FLOAT NOT NULL,
+Fecha VARCHAR(150) NOT NULL,
+PRIMARY KEY (IdCompra));
+
+CREATE TABLE Compra_Proveedor(
+IdComPro VARCHAR(150) NOT NULL,
+IdCompra VARCHAR(150) NOT NULL,
+NitEmpresa VARCHAR(150) NOT NULL,
+Valor FLOAT NOT NULL,
+PRIMARY KEY(IdComPro));
+
+ALTER TABLE Compra_Proveedor
+ADD CONSTRAINT IdCompra_fk
+FOREIGN KEY (IdCompra)
+REFERENCES Compra(IdCompra),
+ADD CONSTRAINT NitEmpresa_fk
+FOREIGN KEY (NitEmpresa)
+REFERENCES Proveedor(NitEmpresa);
+
+CREATE TABLE Accesorio(
+Referencia VARCHAR(150) NOT NULL,
+Tipo VARCHAR(150) NOT NULL,
+Precio FLOAT NOT NULL,
+UnidadesVendidas INT NOT NULL,
+UnidadesStock INT NOT NULL,
+Color VARCHAR(150) NOT NULL,
+Material VARCHAR(150) NOT NULL,
+Marca VARCHAR(150) NOT NULL,
+Caracteristicas VARCHAR(150) NOT NULL,
+Garantia INT NOT NULL,
+PRIMARY KEY (Referencia));
+
+CREATE TABLE Compra_Accesorio(
+IdComAcc VARCHAR(150) NOT NULL,
+Valor FLOAT NOT NULL,
+IdCompra VARCHAR(150) NOT NULL,
+RefAccesorio VARCHAR(150) NOT NULL,
+Cantidad INT NOT NULL,
+PRIMARY KEY (IdComAcc));
+
+ALTER TABLE Compra_Accesorio
+ADD CONSTRAINT IdCompra1_fk
+FOREIGN KEY (IdCompra)
+REFERENCES Compra(IdCompra),
+ADD CONSTRAINT RefAccesorio_fk
+FOREIGN KEY (RefAccesorio)
+REFERENCES Accesorio(Referencia);
+
+CREATE TABLE Componente(
+Referencia VARCHAR(150) NOT NULL,
+Marca VARCHAR(150) NOT NULL,
+Material VARCHAR(150) NOT NULL,
+Color VARCHAR(150) NOT NULL,
+UnidadesStock INT NOT NULL,
+UnidadesVendidas INT NOT NULL,
+Garantia INT NOT NULL,
+Precio FLOAT NOT NULL,
+Tipo VARCHAR(150) NOT NULL,
+Caracteristicas VARCHAR(150) NOT NULL,
+PRIMARY KEY (Referencia));
+
+CREATE TABLE Compra_Componente(
+IdComComp VARCHAR(150) NOT NULL,
+Valor FLOAT NOT NULL,
+IdCompra VARCHAR(150) NOT NULL,
+RefComponente VARCHAR(150) NOT NULL,
+Cantidad INT NOT NULL,
+PRIMARY KEY (IdComComp));
+
+ALTER TABLE Compra_Componente
+ADD CONSTRAINT IdCompra2_FK
+FOREIGN KEY (IdCompra)
+REFERENCES Compra(IdCompra),
+ADD CONSTRAINT RefComponente_fk
+FOREIGN KEY (RefComponente)
+REFERENCES Componente(Referencia);
+
+CREATE TABLE Bicicleta(
+Referencia VARCHAR(150) NOT NULL,
+Precio FLOAT NOT NULL,
+Tipo VARCHAR(150) NOT NULL,
+Talla VARCHAR(150) NOT NULL,
+UnidadesVendidas INT NOT NULL,
+UnidadesStock INT NOT NULL,
+Marca VARCHAR(150) NOT NULL,
+Garantia INT NOT NULL,
+PRIMARY KEY(Referencia));
+
+CREATE TABLE Compra_Bicicleta(
+IdComBic VARCHAR(150) NOT NULL,
+Valor FLOAT NOT NULL,
+IdCompra VARCHAR(150) NOT NULL,
+RefBicicleta VARCHAR(150) NOT NULL,
+Cantidad INT NOT NULL,
+PRIMARY KEY (IdComBic));
+
+ALTER TABLE Compra_Bicicleta
+ADD CONSTRAINT IdCompra3_FK
+FOREIGN KEY (IdCompra)
+REFERENCES Compra(IdCompra),
+ADD CONSTRAINT RefBicicleta_fk
+FOREIGN KEY (RefBicicleta)
+REFERENCES Bicicleta(Referencia);
+
+CREATE TABLE Empleado(
+Documento VARCHAR(150) NOT NULL,
+Nombre VARCHAR(150) NOT NULL,
+Cargo VARCHAR(150) NOT NULL,
+Telefono VARCHAR(150) NOT NULL,
+PRIMARY KEY (Documento));
+
+CREATE TABLE Cliente(
+Documento VARCHAR(150) NOT NULL,
+Nombre VARCHAR(150) NOT NULL,
+Telefono VARCHAR(150) NOT NULL,
+PRIMARY KEY (Documento));
+
+CREATE TABLE Cuenta(
+Email VARCHAR(150) NOT NULL,
+Constraseña VARCHAR(150) NOT NULL,
+Usuario VARCHAR(150) NOT NULL,
+Cliente VARCHAR(150),
+Empleado VARCHAR(150),
+PRIMARY KEY(Email));
+
+ALTER TABLE Cuenta
+ADD CONSTRAINT Cliente_FK
+FOREIGN KEY (Cliente)
+REFERENCES Cliente(Documento),
+ADD CONSTRAINT Empleado_FK
+FOREIGN KEY (Empleado)
+REFERENCES Empleado(Documento);
+
+CREATE TABLE Venta(
+IdVenta VARCHAR(150) NOT NULL,
+Cliente VARCHAR(150) NOT NULL,
+Fecha DATE NOT NULL,
+Empleado VARCHAR(150) NOT NULL,
+ValorTotal FLOAT NOT NULL,
+PRIMARY KEY (IdVenta));
+
+ALTER TABLE Venta
+ADD CONSTRAINT Cliente1_FK
+FOREIGN KEY (Cliente)
+REFERENCES Cliente(Documento),
+ADD CONSTRAINT Empleado1_FK
+FOREIGN KEY (Empleado)
+REFERENCES Empleado(Documento);
+
+CREATE TABLE Venta_Componente(
+IdVenCom VARCHAR(150) NOT NULL,
+RefComponente VARCHAR(150) NOT NULL,
+IdVenta VARCHAR(150) NOT NULL,
+Cantidad INT NOT NULL,
+Valor FLOAT NOT NULL,
+PRIMARY KEY (IdVenCom));
+
+ALTER TABLE Venta_Componente
+ADD CONSTRAINT RefComponente1_fk
+FOREIGN KEY (RefComponente)
+REFERENCES Componente(Referencia),
+ADD CONSTRAINT IdVenta_fk
+FOREIGN KEY (IdVenta)
+REFERENCES Venta(IdVenta);
+
+CREATE TABLE Venta_Accesorio(
+IdVenAcc VARCHAR(150) NOT NULL,
+RefAccesorio VARCHAR (150) NOT NULL,
+IdVenta VARCHAR(150) NOT NULL,
+Cantidad INT NOT NULL,
+Valor FLOAT NOT NULL,
+PRIMARY KEY (IdVenAcc));
+
+ALTER TABLE Venta_Accesorio
+ADD CONSTRAINT RefAccesorio1_fk
+FOREIGN KEY (RefAccesorio)
+REFERENCES Accesorio(Referencia),
+ADD CONSTRAINT IdVenta1_fk
+FOREIGN KEY (IdVenta)
+REFERENCES Venta(IdVenta);
+
+CREATE TABLE Venta_Bicleta(
+IdVenBi VARCHAR(150) NOT NULL,
+RefBicicleta VARCHAR(150) NOT NULL,
+IdVenta VARCHAR(150) NOT NULL,
+Cantidad INT NOT NULL,
+Valor FLOAT NOT NULL,
+PRIMARY KEY (IdVenBi));
+
+ALTER TABLE Venta_Bicleta
+ADD CONSTRAINT RefBicicleta1_fk
+FOREIGN KEY (RefBicicleta)
+REFERENCES Bicicleta(Referencia),
+ADD CONSTRAINT IdVenta2_fk
+FOREIGN KEY (IdVenta)
+REFERENCES Venta(IdVenta);
+
+CREATE TABLE Bicicleta_Componente(
+IdBiComp VARCHAR(150) NOT NULL,
+RefComponente VARCHAR(150) NOT NULL,
+RefBicicleta VARCHAR(150) NOT NULL,
+Cantidad INT NOT NULL,
+PRIMARY KEY (IdBiComp));
+
+ALTER TABLE Bicicleta_Componente
+ADD CONSTRAINT RefBicicleta2_fk
+FOREIGN KEY (RefBicicleta)
+REFERENCES Bicicleta(Referencia),
+ADD CONSTRAINT RefComponente2_fk
+FOREIGN KEY (RefComponente)
+REFERENCES Componente(Referencia);
+
+DROP TABLE Cuenta;
