@@ -131,7 +131,7 @@ PRIMARY KEY (Documento));
 
 CREATE TABLE Cuenta(
 Email VARCHAR(150) NOT NULL,
-Constraseña VARCHAR(150) NOT NULL,
+ConstraseÃ±a VARCHAR(150) NOT NULL,
 Usuario VARCHAR(150) NOT NULL,
 Cliente VARCHAR(150),
 Empleado VARCHAR(150),
@@ -225,3 +225,5 @@ FOREIGN KEY (RefComponente)
 REFERENCES Componente(Referencia);
 
 DROP TABLE Cuenta;
+
+#BicicolN
